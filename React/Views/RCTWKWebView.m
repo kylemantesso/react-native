@@ -23,6 +23,7 @@ static NSString *const MessageHanderName = @"ReactNative";
 @implementation RCTWKWebView
 {
   UIColor * _savedBackgroundColor;
+  WKProcessPool *_processPool;
 }
 
 - (void)dealloc
@@ -48,6 +49,12 @@ static NSString *const MessageHanderName = @"ReactNative";
   return _webkitAvailable;
 }
 
+- (instancetype)initWithProcessPool:(WKProcessPool*)processPool {
+  if (self = [self initWithFrame:CGRectZero]) {
+    _processPool = processPool;
+  }
+  return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -69,6 +76,7 @@ static NSString *const MessageHanderName = @"ReactNative";
     };
 
     WKWebViewConfiguration *wkWebViewConfig = [WKWebViewConfiguration new];
+    wkWebViewConfig.processPool = _processPool;
     wkWebViewConfig.userContentController = [WKUserContentController new];
     [wkWebViewConfig.userContentController addScriptMessageHandler: self name: MessageHanderName];
     wkWebViewConfig.allowsInlineMediaPlayback = _allowsInlineMediaPlayback;

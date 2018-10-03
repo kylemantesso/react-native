@@ -18,13 +18,22 @@
 {
   NSConditionLock *_shouldStartLoadLock;
   BOOL _shouldStartLoad;
+  WKProcessPool *_processPool;
 }
 
 RCT_EXPORT_MODULE()
 
+- (id)init {
+  if (self = [super init]) {
+    _processPool = [[WKProcessPool alloc] init];
+  }
+  
+  return self;
+}
+
 - (UIView *)view
 {
-  RCTWKWebView *webView = [RCTWKWebView new];
+  RCTWKWebView *webView = [[RCTWKWebView alloc] initWithProcessPool:_processPool];
   webView.delegate = self;
   return webView;
 }
